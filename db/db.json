@@ -218,6 +218,11 @@
       "userId": 6,
       "participantId": 1,
       "id": 13
+    },
+    {
+      "userId": 6,
+      "participantId": 2,
+      "id": 14
     }
   ]
 }

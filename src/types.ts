@@ -29,4 +29,24 @@ export type ConversationType = {
   userId: number;
   participantId: number;
   id: number;
+  messages?: {
+    userId: number;
+    messageText: string;
+    conversationId: number;
+    id: number;
+  }[];
+};
+
+export type ConversationProps = {
+  currentUser: User;
+};
+
+export type MessageProps = {
+  message: {
+    userId: number;
+    messageText: string;
+    conversationId: number;
+    id: number;
+  };
+  outgoing:boolean
 };

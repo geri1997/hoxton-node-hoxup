@@ -8,7 +8,7 @@ import NotFound from './pages/NotFound'
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState<User|null>(null)
-  const [modal, setModal] = useState<String>('')
+  const [modal, setModal] = useState<string>('')
   const [users, setUsers] = useState<User[]|null>([])
 
   useEffect(() => {

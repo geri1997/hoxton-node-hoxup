@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import Conversation from '../components/Conversation'
-import { ConversationType, MainProps } from '../types'
+import { ConversationType, MainProps, User } from '../types'
 
 function Main({ currentUser, logOut, users, setModal, modal }:MainProps) {
-  const [conversations, setConversations] = useState<ConversationType[]|null>([])
+  const [conversations, setConversations] = useState<any>([])
   const params = useParams()
   const navigate = useNavigate()
 
@@ -20,8 +20,8 @@ function Main({ currentUser, logOut, users, setModal, modal }:MainProps) {
       .then(conversations => setConversations(conversations))
   }, [currentUser])
 
-  if(users&&conversations){
-  const usersIHaveNotTalkedToYet = users.filter(user => {
+  
+  const usersIHaveNotTalkedToYet = users&&conversations&&users.filter(user => {
     // when do I want to keep this user?
 
     // don't show the currently logged in user
@@ -37,9 +37,10 @@ function Main({ currentUser, logOut, users, setModal, modal }:MainProps) {
     // at this point we know this user's id is not anywhere in the conversations
     // so we want to keep it
     return true
-  })}
+  })
 
   function createConversation(participantId:number):void {
+    console.log(conversations)
     if(!currentUser)return
     fetch('http://localhost:4000/conversations', {
       method: 'POST',
@@ -59,6 +60,8 @@ function Main({ currentUser, logOut, users, setModal, modal }:MainProps) {
   }
 
   if (currentUser === null) return <h1>Not signed in...</h1>
+
+  if(!conversations||!users)return <h2>Loading...</h2>
 
   return (
     <div className="main-wrapper">
@@ -100,7 +103,7 @@ function Main({ currentUser, logOut, users, setModal, modal }:MainProps) {
             </button>
           </li>
 
-          {conversations.map(conversation => {
+          {conversations.map((conversation:ConversationType) => {
             // which id am I talking to
             const talkingToId =
               currentUser.id === conversation.userId
@@ -109,7 +112,7 @@ function Main({ currentUser, logOut, users, setModal, modal }:MainProps) {
 
             // what are their details?
             const talkingToUser = users.find(user => user.id === talkingToId)
-
+            if(talkingToUser)
             return (
               <li key={conversation.id}>
                 <button
@@ -155,7 +158,7 @@ function Main({ currentUser, logOut, users, setModal, modal }:MainProps) {
             */}
             {usersIHaveNotTalkedToYet.length > 0 ? (
               <ul>
-                {usersIHaveNotTalkedToYet.map(user => (
+                {usersIHaveNotTalkedToYet.map((user:User) => (
                   <li key={user.id}>
                     <button
                       className="chat-button"

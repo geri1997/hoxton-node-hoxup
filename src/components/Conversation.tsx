@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { ConversationProps, ConversationType } from '../types'
 import Message from './Message'
 
-function Conversation({ currentUser }) {
-  const [currentConversation, setCurrentConversation] = useState(null)
+function Conversation({ currentUser }:ConversationProps) {
+  const [currentConversation, setCurrentConversation] = useState<ConversationType|null>(null)
 
   const params = useParams()
 
-  function createMessage(text) {
+  function createMessage(text:string) {
     // create a message on the server ✅
 
     fetch('http://localhost:4000/messages', {
@@ -45,19 +46,22 @@ function Conversation({ currentUser }) {
 
   if (currentConversation === null) return <h1>Loading...</h1>
 
+  
   return (
     <main className='conversation'>
       {/* <!-- Chat header --> */}
       <header className='panel'></header>
 
       <ul className='conversation__messages'>
-        {currentConversation.messages.map(message => (
+        
+        {// @ts-ignore
+        currentConversation!==undefined?currentConversation.messages.map(message => (
           <Message
             key={message.id}
             message={message}
             outgoing={message.userId === currentUser.id}
           />
-        ))}
+        )):null}
       </ul>
 
       {/* <!-- Message Box --> */}
@@ -66,7 +70,9 @@ function Conversation({ currentUser }) {
           className='panel conversation__message-box'
           onSubmit={e => {
             e.preventDefault()
+            // @ts-ignore
             createMessage(e.target.text.value)
+            // @ts-ignore
             e.target.reset()
           }}
         >
