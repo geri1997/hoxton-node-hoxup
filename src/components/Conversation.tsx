@@ -54,14 +54,14 @@ function Conversation({ currentUser }:ConversationProps) {
 
       <ul className='conversation__messages'>
         
-        {// @ts-ignore
-        currentConversation!==undefined?currentConversation.messages.map(message => (
+        {
+       currentConversation.messages?.map(message => (
           <Message
             key={message.id}
             message={message}
             outgoing={message.userId === currentUser.id}
           />
-        )):null}
+        ))}
       </ul>
 
       {/* <!-- Message Box --> */}
